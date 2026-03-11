@@ -1,0 +1,24 @@
+﻿
+C:\Projects\ai-agent-saas\app\page.tsx
+  73:21  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+C:\Projects\ai-agent-saas\app\page.tsx:73:21
+  71 | export default function Home() {
+  72 |   const [mounted, setMounted] = useState(false);
+> 73 |   useEffect(() => { setMounted(true); }, []);
+     |                     ^^^^^^^^^^ Avoid calling setState() directly within an effect
+  74 |
+  75 |   if (!mounted) return null;
+  76 |  react-hooks/set-state-in-effect
+
+C:\Projects\ai-agent-saas\app\privacy\page.tsx
+  174:70  error  `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+
+Ô£û 2 problems (2 errors, 0 warnings)
+
