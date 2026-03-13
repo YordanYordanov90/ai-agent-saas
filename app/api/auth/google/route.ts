@@ -2,7 +2,10 @@ import { auth } from "@clerk/nextjs/server";
 import { NextRequest, NextResponse } from "next/server";
 import crypto from "crypto";
 import { cookies } from "next/headers";
-import { getAuthUrl, GoogleProvider } from "@/lib/google";
+import { getAuthUrl } from "@/lib/google";
+import { z } from "zod";
+
+const providerSchema = z.enum(["gmail", "google_calendar"]);
 
 export async function GET(request: NextRequest) {
   //verify auth
@@ -11,10 +14,14 @@ export async function GET(request: NextRequest) {
     return NextResponse.redirect(new URL("/sign-in", request.url));
   }
   //get the provider from the request
-  const provider = request.nextUrl.searchParams.get("provider");
-  if (!provider || !["gmail", "google_calendar"].includes(provider)) {
+  const providerParam = request.nextUrl.searchParams.get("provider");
+  const validation = providerSchema.safeParse(providerParam);
+  
+  if (!validation.success) {
     return NextResponse.json({ error: "Invalid provider" }, { status: 400 });
   }
+  
+  const provider = validation.data;
   //generate CSRF token
   const state = Buffer.from(
     JSON.stringify({ nonce: crypto.randomUUID(), provider }),
@@ -29,7 +36,7 @@ export async function GET(request: NextRequest) {
     sameSite: "lax",
   });
 
-  const authUrl = getAuthUrl(provider as GoogleProvider, state);
+  const authUrl = getAuthUrl(provider, state);
   //redirect to Google OAuth URL with state
   return NextResponse.redirect(authUrl);
 }

@@ -1,6 +1,6 @@
-import { auth } from "@clerk/nextjs/server";
+import { auth, currentUser } from "@clerk/nextjs/server";
 import { NextRequest, NextResponse } from "next/server";
-import { getUserByClerkId, getUsersWithAgentEnabled, getLatestAgentRun } from "@/db/queries";
+import { getOrCreateUser, getUsersWithAgentEnabled, getLatestAgentRun } from "@/db/queries";
 import { runAgent } from '@/lib/agent';
 
 
@@ -9,7 +9,6 @@ export async function POST(request: NextRequest) {
   const isCron =
     process.env.CRON_SECRET &&
     cronSecret === `Bearer ${process.env.CRON_SECRET}`;
-  //2 jobs
 
   //2. auto run job - cron
   if (!isCron) {
@@ -18,11 +17,14 @@ export async function POST(request: NextRequest) {
     if (!clerkId) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
-    //get the clerk user by id
-    const user = await getUserByClerkId(clerkId);
-    if (!user) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
-    }
+    
+    // Get user email from Clerk
+    const clerkUser = await currentUser();
+    const email = clerkUser?.emailAddresses[0]?.emailAddress ?? "";
+    const name = clerkUser?.fullName ?? "";
+    
+    // Create user if doesn't exist
+    const user = await getOrCreateUser(clerkId, email, name);
 
     if (!user.agentEnabled) {
       return NextResponse.json(

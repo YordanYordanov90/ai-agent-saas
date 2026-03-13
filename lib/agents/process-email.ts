@@ -4,7 +4,7 @@ import { generateText, Output } from "ai";
 
 import { z } from "zod";
 
-const emailAnalysisSchema = z.object({
+export const emailAnalysisSchema = z.object({
   summary: z.string().describe("A 1-2 sentence summary of the email"),
   priority: z
     .enum(["low", "medium", "high"])
@@ -72,7 +72,7 @@ const emailAnalysisSchema = z.object({
 
 export type EmailAnalysis = z.infer<typeof emailAnalysisSchema>;
 
-export async function anaylzeWithAI(
+export async function analyzeWithAI(
   email: ParsedEmail,
   upcomingEvents: CalendarEvent[],
 ): Promise<EmailAnalysis> {

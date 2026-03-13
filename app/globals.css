@@ -62,7 +62,7 @@
   --secondary: #fcbf49;
   --secondary-foreground: oklch(0.15 0.005 280);
   --muted: oklch(0.18 0.008 60);
-  --muted-foreground: #eae2b7aa;
+  --muted-foreground: #eae2b7cc;
   --accent: #fcbf49;
   --accent-foreground: oklch(0.15 0.005 280);
   --destructive: #d62828;
@@ -96,7 +96,7 @@
   --secondary: #fcbf49;
   --secondary-foreground: oklch(0.15 0.005 280);
   --muted: oklch(0.18 0.008 60);
-  --muted-foreground: #eae2b7aa;
+  --muted-foreground: #eae2b7cc;
   --accent: #fcbf49;
   --accent-foreground: oklch(0.15 0.005 280);
   --destructive: #d62828;
@@ -796,4 +796,31 @@ body::after {
   /* Kill Clerk's JS-applied translate3d slide-in */
   transform: none !important;
   will-change: auto !important;
+}
+
+/* Respect user motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  
+  .aurora-blob {
+    animation: none !important;
+  }
+  
+  body::before,
+  body::after {
+    animation: none !important;
+  }
+}
+
+/* Focus visible styles for accessibility */
+:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
 }

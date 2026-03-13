@@ -7,7 +7,7 @@ import {
   fetchUpcomingEvents,
 } from "./agents/calendar";
 import { ActionLogEntry } from "@/db/schema";
-import { anaylzeWithAI } from "./agents/process-email";
+import { analyzeWithAI } from "./agents/process-email";
 import { calendar_v3, gmail_v1 } from "googleapis";
 
 async function processSingleEmail(
@@ -18,7 +18,7 @@ async function processSingleEmail(
   calendarClient: calendar_v3.Calendar | null,
 ) {
   try {
-    const analysis = await anaylzeWithAI(email, upcomingEvents);
+    const analysis = await analyzeWithAI(email, upcomingEvents);
     //create tasks from action items
     let emailTasksCreated = 0;
 

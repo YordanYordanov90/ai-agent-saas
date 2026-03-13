@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { Sparkles, ArrowLeft, Mail, MapPin, Phone, MessageSquare } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { useState } from "react";
 
 export default function ContactPage() {
@@ -75,12 +77,12 @@ export default function ContactPage() {
                   <label htmlFor="name" className="text-sm font-medium text-muted-foreground">
                     Full Name
                   </label>
-                  <input
+                  <Input
                     id="name"
                     required
                     type="text"
-                    className="w-full bg-background/50 border border-border/50 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all text-foreground placeholder:text-muted-foreground/50"
                     placeholder="Jane Doe"
+                    className="bg-background/50"
                   />
                 </div>
                 
@@ -88,12 +90,12 @@ export default function ContactPage() {
                   <label htmlFor="email" className="text-sm font-medium text-muted-foreground">
                     Work Email
                   </label>
-                  <input
+                  <Input
                     id="email"
                     required
                     type="email"
-                    className="w-full bg-background/50 border border-border/50 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all text-foreground placeholder:text-muted-foreground/50"
                     placeholder="jane@company.com"
+                    className="bg-background/50"
                   />
                 </div>
 
@@ -103,7 +105,7 @@ export default function ContactPage() {
                   </label>
                   <select
                     id="subject"
-                    className="w-full bg-background/50 border border-border/50 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all text-foreground appearance-none"
+                    className="flex h-9 w-full rounded-md border border-input bg-background/50 px-3 py-1 text-sm shadow-xs transition-[color,box-shadow] outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
                   >
                     <option value="general">General Inquiry</option>
                     <option value="support">Technical Support</option>
@@ -116,13 +118,13 @@ export default function ContactPage() {
                   <label htmlFor="message" className="text-sm font-medium text-muted-foreground">
                     Message
                   </label>
-                  <textarea
+                  <Textarea
                     id="message"
                     required
                     rows={5}
-                    className="w-full bg-background/50 border border-border/50 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all resize-none text-foreground placeholder:text-muted-foreground/50"
                     placeholder="How can we help you?"
-                  ></textarea>
+                    className="resize-none bg-background/50"
+                  />
                 </div>
 
                 <Button type="submit" size="lg" className="w-full h-14 text-lg rounded-xl premium-glow-btn text-primary-foreground mt-4">

@@ -1,7 +1,7 @@
-import { getUserByClerkId, upsertIntegration } from "@/db/queries";
+import { getOrCreateUser, upsertIntegration } from "@/db/queries";
 import { encrypt } from "@/lib/encryption";
 import { createOAuth2Client, GoogleProvider } from "@/lib/google";
-import { auth } from "@clerk/nextjs/server";
+import { auth, currentUser } from "@clerk/nextjs/server";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -52,13 +52,11 @@ export async function GET(request: NextRequest) {
         new URL("/settings?error=no_tokens", request.url),
       );
     }
-    //look up internal user
-    const user = await getUserByClerkId(clerkId);
-    if (!user) {
-      return NextResponse.redirect(
-        new URL("/settings?error=user_not_found", request.url),
-      );
-    }
+    //look up internal user (create if doesn't exist)
+    const clerkUser = await currentUser();
+    const email = clerkUser?.emailAddresses[0]?.emailAddress ?? "";
+    const name = clerkUser?.fullName ?? "";
+    const user = await getOrCreateUser(clerkId, email, name);
     //encrypt the token
     //store the token in the database
 
